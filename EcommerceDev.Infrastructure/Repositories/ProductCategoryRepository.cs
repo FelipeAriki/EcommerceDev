@@ -1,12 +1,23 @@
 ﻿using EcommerceDev.Core.Entities;
 using EcommerceDev.Core.Repositories;
+using EcommerceDev.Infrastructure.Persistence;
 
 namespace EcommerceDev.Infrastructure.Repositories;
 
 public class ProductCategoryRepository : IProductCategoryRepository
 {
-    public Task<Guid> CreateProductCategoryAsync(ProductCategory productCategory)
+    private readonly EcommerceDbContext _context;
+
+    public ProductCategoryRepository(EcommerceDbContext context)
     {
-        throw new NotImplementedException();
+        _context = context;
+    }
+
+    public async Task<Guid> CreateProductCategoryAsync(ProductCategory productCategory)
+    {
+        await _context.ProductCategories.AddAsync(productCategory);
+        await _context.SaveChangesAsync();
+
+        return productCategory.Id;
     }
 }
