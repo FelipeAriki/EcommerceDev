@@ -1,7 +1,10 @@
 ﻿using EcommerceDev.Core.Repositories;
+using EcommerceDev.Infrastructure.Messaging;
+using EcommerceDev.Infrastructure.Messaging.Consumers;
 using EcommerceDev.Infrastructure.Persistence;
 using EcommerceDev.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace EcommerceDev.Infrastructure;
@@ -10,11 +13,12 @@ public static class InfrastructureModule
 {
     extension(IServiceCollection services)
     {
-        public IServiceCollection AddInfrastructure()
+        public IServiceCollection AddInfrastructure(IConfiguration configuration)
         {
             services
                 .AddData()
-                .AddRepositories();
+                .AddRepositories()
+                .AddMessaging(configuration);
 
             return services;
         }
@@ -34,6 +38,20 @@ public static class InfrastructureModule
                 .AddScoped<IOrderRepository, OrderRepository>()
                 .AddScoped<IProductCategoryRepository, ProductCategoryRepository>()
                 .AddScoped<IProductRepository, ProductRepository>();
+
+            return services;
+        }
+
+        private IServiceCollection AddMessaging(IConfiguration configuration)
+        {
+            var rabbitMqSettings = new RabbitMqSettings();
+            configuration.GetSection("RabbitMQ").Bind(rabbitMqSettings);
+
+            services.AddSingleton(rabbitMqSettings);
+
+            services.AddSingleton<IEventPublisher, RabbitMqEventPublisher>();
+
+            services.AddHostedService<OrderCreatedEventConsumer>();
 
             return services;
         }
