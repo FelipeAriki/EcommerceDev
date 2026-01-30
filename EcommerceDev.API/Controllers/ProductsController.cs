@@ -15,7 +15,7 @@ namespace EcommerceDev.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateProductCommand request)
+        public async Task<IActionResult> CreateProduct(CreateProductCommand request)
         {
             var result = await _mediator
                 .DispatchAsync<CreateProductCommand, ResultViewModel<Guid>>(request);

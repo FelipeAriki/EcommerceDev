@@ -16,7 +16,7 @@ namespace EcommerceDev.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateCategoryCommand request)
+        public async Task<IActionResult> CreateCategory(CreateCategoryCommand request)
         {
             var result = await _mediator
                 .DispatchAsync<CreateCategoryCommand, ResultViewModel<Guid>>(request);
