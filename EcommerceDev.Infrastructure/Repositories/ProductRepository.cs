@@ -14,6 +14,7 @@ public class ProductRepository : IProductRepository
         _context = context;
     }
 
+    #region Produtos
     public async Task<List<Product>> GetProductsAsync()
     {
         return await _context.Products.Where(p => !p.IsDeleted).ToListAsync();
@@ -31,4 +32,18 @@ public class ProductRepository : IProductRepository
 
         return product.Id;
     }
+    #endregion
+
+    #region Imagem Produtos
+    public async Task CreateProductImageAsync(ProductImage productImage)
+    {
+        await _context.ProductImages.AddAsync(productImage);
+        await _context.SaveChangesAsync();
+    }
+
+    public async Task<ProductImage?> GetProductImageById(Guid id)
+    {
+        return await _context.ProductImages.SingleOrDefaultAsync(p => p.Id == id);
+    }
+    #endregion
 }

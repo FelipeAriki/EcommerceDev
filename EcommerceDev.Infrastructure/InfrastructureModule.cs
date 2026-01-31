@@ -1,8 +1,10 @@
-﻿using EcommerceDev.Core.Repositories;
+﻿using Azure.Storage.Blobs;
+using EcommerceDev.Core.Repositories;
 using EcommerceDev.Infrastructure.Messaging;
 using EcommerceDev.Infrastructure.Messaging.Consumers;
 using EcommerceDev.Infrastructure.Persistence;
 using EcommerceDev.Infrastructure.Repositories;
+using EcommerceDev.Infrastructure.Storage;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,7 +20,8 @@ public static class InfrastructureModule
             services
                 .AddData()
                 .AddRepositories()
-                .AddMessaging(configuration);
+                .AddMessaging(configuration)
+                .AddStorage(configuration);
 
             return services;
         }
@@ -52,6 +55,17 @@ public static class InfrastructureModule
             services.AddSingleton<IEventPublisher, RabbitMqEventPublisher>();
 
             services.AddHostedService<OrderCreatedEventConsumer>();
+
+            return services;
+        }
+
+        private IServiceCollection AddStorage(IConfiguration configuration)
+        {
+            var connectionString = configuration.GetConnectionString("StorageAccount");
+            var blobServiceClient = new BlobServiceClient(connectionString);
+
+            services.AddSingleton(blobServiceClient);
+            services.AddScoped<IBlobStorageService, BlobStorageService>();
 
             return services;
         }
