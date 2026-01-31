@@ -32,18 +32,18 @@ namespace EcommerceDev.API.Controllers
                 6_000m, "Acer", 100, category.Id);
 
             var order = new Order(customer.Id, address.Id, 10, 6000, new List<OrderItem>
-        {
-            new OrderItem(product.Id, 1, 6000)
-        });
+            {
+                new(product.Id, 1, 6000)
+            });
 
             var objects = new List<object>
-        {
-            customer,
-            product,
-            category,
-            order,
-            address
-        };
+            {
+                customer,
+                product,
+                category,
+                order,
+                address
+            };
 
             await context.AddRangeAsync(objects);
             await context.SaveChangesAsync();
