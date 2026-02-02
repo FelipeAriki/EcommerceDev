@@ -13,7 +13,7 @@ namespace EcommerceDev.API.Controllers
         public async Task<IActionResult> SeedData(
         [FromServices] EcommerceDbContext context)
         {
-            var customer = new Customer("Luis", "luis@mail.com", "12345678", DateTime.Now.AddYears(-30), "12345678910");
+            var customer = new Customer("Luis", "luis@mail.com", "12345678", DateTime.UtcNow.AddYears(-30), "12345678910");
             var address = new CustomerAddress(
                 idCustomer: customer.Id,
                 recipientName: "Luis Felipe",

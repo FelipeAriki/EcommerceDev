@@ -20,9 +20,12 @@ public class ProductRepository : IProductRepository
         return await _context.Products.Where(p => !p.IsDeleted).ToListAsync();
     }
 
-    public async Task<Product> GetProductByIdAsync(Guid id)
+    public async Task<Product?> GetProductByIdAsync(Guid id)
     {
-        return await _context.Products.SingleOrDefaultAsync(p => p.Id == id);
+        return await _context.Products
+            .Include(p => p.Category)
+            .Include(p => p.Reviews)
+            .SingleOrDefaultAsync(p => p.Id == id);
     }
 
     public async Task<Guid> CreateProductAsync(Product product)

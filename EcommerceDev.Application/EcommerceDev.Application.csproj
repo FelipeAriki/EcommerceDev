@@ -12,7 +12,6 @@
     <Folder Include="Commands\Customers\CreateCustomerAddress\" />
     <Folder Include="Commands\Orders\CreateOrder\" />
     <Folder Include="Commands\Products\CreateProduct\" />
-    <Folder Include="Queries\Products\GetAllProducts\" />
   </ItemGroup>
 
   <ItemGroup>

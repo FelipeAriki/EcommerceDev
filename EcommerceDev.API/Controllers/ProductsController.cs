@@ -3,6 +3,8 @@ using EcommerceDev.Application.Commands.Products.UploadImageForProduct;
 using EcommerceDev.Application.Common;
 using EcommerceDev.Application.Queries.Products.DownloadAllImagesForProduct;
 using EcommerceDev.Application.Queries.Products.DownloadImageForProduct;
+using EcommerceDev.Application.Queries.Products.GetAllProducts;
+using EcommerceDev.Application.Queries.Products.GetProductDetails;
 using Microsoft.AspNetCore.Mvc;
 using System.IO.Compression;
 
@@ -16,6 +18,22 @@ namespace EcommerceDev.API.Controllers
         public ProductsController(IMediator mediator)
         {
             _mediator = mediator;
+        }
+
+        [HttpGet("{id:guid}")]
+        public async Task<IActionResult> GetProductDetails(Guid id)
+        {
+            var response = await _mediator.DispatchAsync<GetProductDetailsQuery, ResultViewModel<ProductDetailsViewModel>>(new GetProductDetailsQuery(id));
+            if (!response.IsSuccess) return BadRequest(response);
+            return Ok(response);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetProducts()
+        {
+            var response = await _mediator.DispatchAsync<GetAllProductsQuery, ResultViewModel<IEnumerable<GetAllProductsItemViewModel>>>(new GetAllProductsQuery());
+            if (!response.IsSuccess) return BadRequest(response);
+            return Ok(response);
         }
 
         [HttpPost]
