@@ -4,8 +4,7 @@ using EcommerceDev.Core.Repositories;
 
 namespace EcommerceDev.Application.Commands.Customers.CreateCustomer;
 
-public class CreateCustomerCommandHandler
-    : IHandler<CreateCustomerCommand, ResultViewModel<Guid>>
+public class CreateCustomerCommandHandler : IHandler<CreateCustomerCommand, ResultViewModel<Guid>>
 {
     private readonly ICustomerRepository _repository;
 
@@ -16,6 +15,7 @@ public class CreateCustomerCommandHandler
 
     public async Task<ResultViewModel<Guid>> HandleAsync(CreateCustomerCommand request)
     {
+        request.BirthDate = DateTime.SpecifyKind(request.BirthDate, DateTimeKind.Utc);
         var customer = new Customer(request.FullName, request.Email, request.PhoneNumber, request.BirthDate,
             request.Document);
 

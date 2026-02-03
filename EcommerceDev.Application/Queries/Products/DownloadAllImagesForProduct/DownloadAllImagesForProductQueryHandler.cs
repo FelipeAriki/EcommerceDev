@@ -3,8 +3,7 @@ using EcommerceDev.Infrastructure.Storage;
 
 namespace EcommerceDev.Application.Queries.Products.DownloadAllImagesForProduct;
 
-public class DownloadAllImagesForProductQueryHandler
-    : IHandler<DownloadAllImagesForProductQuery, ResultViewModel<List<Stream>>>
+public class DownloadAllImagesForProductQueryHandler : IHandler<DownloadAllImagesForProductQuery, ResultViewModel<List<Stream>>>
 {
     private readonly IBlobStorageService _storageService;
 

@@ -4,8 +4,7 @@ using EcommerceDev.Core.Repositories;
 
 namespace EcommerceDev.Application.Commands.Customers.CreateCustomerAddress;
 
-public class CreateCustomerAddressCommandHandler
-    : IHandler<CreateCustomerAddressCommand, ResultViewModel<Guid>>
+public class CreateCustomerAddressCommandHandler : IHandler<CreateCustomerAddressCommand, ResultViewModel<Guid>>
 {
     private readonly ICustomerRepository _repository;
 

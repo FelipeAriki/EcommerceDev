@@ -5,8 +5,7 @@ using EcommerceDev.Infrastructure.Caching;
 
 namespace EcommerceDev.Application.Commands.Products.CreateProduct;
 
-public class CreateProductCommandHandler
-    : IHandler<CreateProductCommand, ResultViewModel<Guid>>
+public class CreateProductCommandHandler : IHandler<CreateProductCommand, ResultViewModel<Guid>>
 {
     private readonly IProductRepository _repository;
     private readonly ICacheService _cacheService;

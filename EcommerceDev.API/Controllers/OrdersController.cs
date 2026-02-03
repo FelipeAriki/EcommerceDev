@@ -2,31 +2,30 @@
 using EcommerceDev.Application.Common;
 using Microsoft.AspNetCore.Mvc;
 
-namespace EcommerceDev.API.Controllers
+namespace EcommerceDev.API.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class OrdersController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class OrdersController : ControllerBase
+    private readonly IMediator _mediator;
+
+    public OrdersController(IMediator mediator)
     {
-        private readonly IMediator _mediator;
+        _mediator = mediator;
+    }
 
-        public OrdersController(IMediator mediator)
+    [HttpPost]
+    public async Task<IActionResult> CreateOrder([FromBody] CreateOrderCommand request)
+    {
+        var result = await _mediator
+            .DispatchAsync<CreateOrderCommand, ResultViewModel<Guid>>(request);
+
+        if (!result.IsSuccess)
         {
-            _mediator = mediator;
+            return BadRequest(result.Message);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateOrder([FromBody] CreateOrderCommand request)
-        {
-            var result = await _mediator
-                .DispatchAsync<CreateOrderCommand, ResultViewModel<Guid>>(request);
-
-            if (!result.IsSuccess)
-            {
-                return BadRequest(result.Message);
-            }
-
-            return Ok(result);
-        }
+        return Ok(result);
     }
 }

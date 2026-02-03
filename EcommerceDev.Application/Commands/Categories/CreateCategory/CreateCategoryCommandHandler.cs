@@ -4,8 +4,7 @@ using EcommerceDev.Core.Repositories;
 
 namespace EcommerceDev.Application.Commands.Categories.CreateCategory;
 
-public class CreateCategoryCommandHandler :
-    IHandler<CreateCategoryCommand, ResultViewModel<Guid>>
+public class CreateCategoryCommandHandler : IHandler<CreateCategoryCommand, ResultViewModel<Guid>>
 {
     private readonly IMediator _mediator;
     private readonly IProductCategoryRepository _repository;

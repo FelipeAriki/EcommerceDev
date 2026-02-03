@@ -6,8 +6,7 @@ using EcommerceDev.Infrastructure.Messaging;
 
 namespace EcommerceDev.Application.Commands.Orders.CreateOrder;
 
-public class CreateOrderCommandHandler
-    : IHandler<CreateOrderCommand, ResultViewModel<Guid>>
+public class CreateOrderCommandHandler : IHandler<CreateOrderCommand, ResultViewModel<Guid>>
 {
     private readonly IOrderRepository _repository;
     private readonly IEventPublisher _eventPublisher;

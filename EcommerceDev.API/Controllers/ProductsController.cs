@@ -8,106 +8,106 @@ using EcommerceDev.Application.Queries.Products.GetProductDetails;
 using Microsoft.AspNetCore.Mvc;
 using System.IO.Compression;
 
-namespace EcommerceDev.API.Controllers
+namespace EcommerceDev.API.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class ProductsController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class ProductsController : ControllerBase
+    private readonly IMediator _mediator;
+    public ProductsController(IMediator mediator)
     {
-        private readonly IMediator _mediator;
-        public ProductsController(IMediator mediator)
+        _mediator = mediator;
+    }
+
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> GetProductDetails(Guid id)
+    {
+        var response = await _mediator.DispatchAsync<GetProductDetailsQuery, ResultViewModel<ProductDetailsViewModel>>(new GetProductDetailsQuery(id));
+        if (!response.IsSuccess) return BadRequest(response);
+        return Ok(response);
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetProducts()
+    {
+        var response = await _mediator.DispatchAsync<GetAllProductsQuery, ResultViewModel<IEnumerable<GetAllProductsItemViewModel>>>(new GetAllProductsQuery());
+        if (!response.IsSuccess) return BadRequest(response);
+        return Ok(response);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateProduct(CreateProductCommand request)
+    {
+        var result = await _mediator
+            .DispatchAsync<CreateProductCommand, ResultViewModel<Guid>>(request);
+
+        if (!result.IsSuccess)
         {
-            _mediator = mediator;
+            return BadRequest(result.Message);
         }
 
-        [HttpGet("{id:guid}")]
-        public async Task<IActionResult> GetProductDetails(Guid id)
+        return Ok(result);
+    }
+
+    [HttpPost("{id:guid}/images")]
+    public async Task<IActionResult> UploadProductPhoto(Guid id, IFormFile formFile)
+    {
+        var stream = new MemoryStream();
+        await formFile.CopyToAsync(stream);
+        stream.Position = 0;
+
+        var command = new UploadImageForProductCommand(id, formFile.FileName, stream);
+        var response = await _mediator.DispatchAsync<UploadImageForProductCommand, ResultViewModel<bool>>(command);
+        if (!response.IsSuccess) return BadRequest(response);
+        return Ok(response);
+    }
+
+    [HttpGet("{id:guid}/images/{imageId:guid}")]
+    public async Task<IActionResult> DownloadPhoto(Guid id, Guid imageId)
+    {
+        var query = new DownloadImageForProductQuery(imageId);
+
+        var result =
+            await _mediator.DispatchAsync<DownloadImageForProductQuery, ResultViewModel<Stream>>(query);
+
+        if (!result.IsSuccess || result.Data == null)
         {
-            var response = await _mediator.DispatchAsync<GetProductDetailsQuery, ResultViewModel<ProductDetailsViewModel>>(new GetProductDetailsQuery(id));
-            if (!response.IsSuccess) return BadRequest(response);
-            return Ok(response);
+            return BadRequest(result.Message);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetProducts()
-        {
-            var response = await _mediator.DispatchAsync<GetAllProductsQuery, ResultViewModel<IEnumerable<GetAllProductsItemViewModel>>>(new GetAllProductsQuery());
-            if (!response.IsSuccess) return BadRequest(response);
-            return Ok(response);
-        }
+        return File(result.Data, "image/jpeg");
+    }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateProduct(CreateProductCommand request)
-        {
-            var result = await _mediator
-                .DispatchAsync<CreateProductCommand, ResultViewModel<Guid>>(request);
+    [HttpGet("{id:guid}/images")]
+    public async Task<IActionResult> DownloadImages(Guid id)
+    {
+        var query = new DownloadAllImagesForProductQuery(id);
 
-            if (!result.IsSuccess)
+        var result =
+            await _mediator.DispatchAsync<DownloadAllImagesForProductQuery, ResultViewModel<List<Stream>>>(query);
+
+        var streams = result.Data;
+        if (streams is null) return NotFound();
+
+        var memoryStream = new MemoryStream();
+
+        using (var zipArchive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
+        {
+            foreach (var stream in streams)
             {
-                return BadRequest(result.Message);
+                var entry = zipArchive.CreateEntry($"{Guid.NewGuid().ToString()}.jpeg");
+
+                using var entryStream = entry.Open();
+
+                stream.CopyTo(entryStream);
             }
-
-            return Ok(result);
         }
 
-        [HttpPost("{id:guid}/images")]
-        public async Task<IActionResult> UploadProductPhoto(Guid id, IFormFile formFile)
-        {
-            var stream = new MemoryStream();
-            await formFile.CopyToAsync(stream);
-            stream.Position = 0;
+        memoryStream.Position = 0;
 
-            var command = new UploadImageForProductCommand(id, formFile.FileName, stream);
-            var response = await _mediator.DispatchAsync<UploadImageForProductCommand, ResultViewModel<bool>>(command);
-            if (!response.IsSuccess) return BadRequest(response);
-            return Ok(response);
-        }
+        var zipFileName = $"images_{id}.zip";
 
-        [HttpGet("{id:guid}/images/{imageId:guid}")]
-        public async Task<IActionResult> DownloadPhoto(Guid id, Guid imageId)
-        {
-            var query = new DownloadImageForProductQuery(imageId);
-
-            var result =
-                await _mediator.DispatchAsync<DownloadImageForProductQuery, ResultViewModel<Stream>>(query);
-
-            if (!result.IsSuccess || result.Data == null)
-            {
-                return BadRequest(result.Message);
-            }
-
-            return File(result.Data, "image/jpeg");
-        }
-
-        [HttpGet("{id:guid}/images")]
-        public async Task<IActionResult> DownloadImages(Guid id)
-        {
-            var query = new DownloadAllImagesForProductQuery(id);
-
-            var result =
-                await _mediator.DispatchAsync<DownloadAllImagesForProductQuery, ResultViewModel<List<Stream>>>(query);
-
-            var streams = result.Data;
-
-            var memoryStream = new MemoryStream();
-
-            using (var zipArchive = new ZipArchive(memoryStream, ZipArchiveMode.Create, true))
-            {
-                foreach (var stream in streams)
-                {
-                    var entry = zipArchive.CreateEntry($"{Guid.NewGuid().ToString()}.jpeg");
-
-                    using var entryStream = entry.Open();
-
-                    stream.CopyTo(entryStream);
-                }
-            }
-
-            memoryStream.Position = 0;
-
-            var zipFileName = $"images_{id}.zip";
-
-            return File(memoryStream, "application/zip", zipFileName);
-        }
+        return File(memoryStream, "application/zip", zipFileName);
     }
 }
