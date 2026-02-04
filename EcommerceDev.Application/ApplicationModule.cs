@@ -5,25 +5,28 @@ namespace EcommerceDev.Application;
 
 public static class ApplicationModule
 {
-    public static IServiceCollection AddApplication(this IServiceCollection services)
+    extension(IServiceCollection services)
     {
-        services
-            .AddHandlers();
+        public IServiceCollection AddApplication()
+        {
+            services
+                .AddHandlers();
 
-        return services;
-    }
+            return services;
+        }
 
-    private static IServiceCollection AddHandlers(this IServiceCollection services)
-    {
-        services.AddSingleton<IMediator, Mediator>();
+        private IServiceCollection AddHandlers()
+        {
+            services.AddSingleton<IMediator, Mediator>();
 
-        services.Scan(s =>
-            s.FromAssemblies(typeof(ApplicationModule).Assembly)
-                .AddClasses(c => c.AssignableTo(typeof(IHandler<,>)))
-                .AsImplementedInterfaces()
-                .WithTransientLifetime()
-        );
+            services.Scan(s =>
+                s.FromAssemblies(typeof(ApplicationModule).Assembly)
+                    .AddClasses(c => c.AssignableTo(typeof(IHandler<,>)))
+                    .AsImplementedInterfaces()
+                    .WithTransientLifetime()
+            );
 
-        return services;
+            return services;
+        }
     }
 }

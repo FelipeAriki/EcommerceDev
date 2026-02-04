@@ -7,9 +7,9 @@ public class Customer : BaseEntity
     public string PhoneNumber { get; set; }
     public DateTime BirthDate { get; set; }
     public string Document { get; set; }
-    public List<CustomerAddress> Addresses { get; set; }
-    public List<Order> Orders { get; set; }
-    public List<OrderItemReview> Reviews { get; set; }
+    public IEnumerable<CustomerAddress> Addresses { get; set; }
+    public IEnumerable<Order> Orders { get; set; }
+    public IEnumerable<OrderItemReview> Reviews { get; set; }
 
     protected Customer() { }
     public Customer(string fullName, string email, string phoneNumber, DateTime birthDate, string document)

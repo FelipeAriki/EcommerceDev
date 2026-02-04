@@ -17,7 +17,7 @@ public class GetAllproductsQueryHandler : IHandler<GetAllProductsQuery, ResultVi
 
     public async Task<ResultViewModel<IEnumerable<GetAllProductsItemViewModel>>> HandleAsync(GetAllProductsQuery request)
     {
-        var cachedProducts = await _cacheService.GetAsync<List<GetAllProductsItemViewModel>>(_cacheKeyPrefix);
+        var cachedProducts = await _cacheService.GetAsync<IEnumerable<GetAllProductsItemViewModel>>(_cacheKeyPrefix);
 
         if (cachedProducts != null)
         {

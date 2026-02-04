@@ -13,11 +13,11 @@ public class Order : BaseEntity
     public CustomerAddress DeliveryAddress { get; private set; }
     public decimal ShippingPrice { get; private set; }
     public decimal TotalProductsPrice { get; private set; }
-    public List<OrderItem> Items { get; private set; }
-    public List<OrderUpdate> Updates { get; private set; }
+    public IEnumerable<OrderItem> Items { get; private set; }
+    public IEnumerable<OrderUpdate> Updates { get; private set; }
 
     protected Order() { }
-    public Order(Guid idCustomer, Guid deliveryAddressId, decimal shippingPrice, decimal totalProductsPrice, List<OrderItem> items)
+    public Order(Guid idCustomer, Guid deliveryAddressId, decimal shippingPrice, decimal totalProductsPrice, IEnumerable<OrderItem> items)
     {
         IdCustomer = idCustomer;
         Status = OrderStatus.Created;

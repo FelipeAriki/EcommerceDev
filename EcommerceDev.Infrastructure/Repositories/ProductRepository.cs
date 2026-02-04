@@ -15,7 +15,7 @@ public class ProductRepository : IProductRepository
     }
 
     #region Produtos
-    public async Task<List<Product>> GetProductsAsync()
+    public async Task<IEnumerable<Product>> GetProductsAsync()
     {
         return await _context.Products.Where(p => !p.IsDeleted).ToListAsync();
     }

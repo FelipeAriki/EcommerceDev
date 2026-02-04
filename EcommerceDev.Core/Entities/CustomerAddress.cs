@@ -25,4 +25,7 @@ public class CustomerAddress : BaseEntity
         City = city;
         Country = country;
     }
+
+    public string GetFullAddress()
+        => $"{AddressLine1} {AddressLine2} {ZipCode} {District} {State} {City}";
 }

@@ -23,9 +23,7 @@ public class CustomersController : ControllerBase
             .DispatchAsync<CreateCustomerCommand, ResultViewModel<Guid>>(request);
 
         if (!result.IsSuccess)
-        {
             return BadRequest(result.Message);
-        }
 
         return Ok(result);
     }
@@ -37,9 +35,7 @@ public class CustomersController : ControllerBase
             .DispatchAsync<CreateCustomerAddressCommand, ResultViewModel<Guid>>(request);
 
         if (!result.IsSuccess)
-        {
             return BadRequest(result.Message);
-        }
 
         return Ok(result);
     }

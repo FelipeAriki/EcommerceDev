@@ -43,9 +43,7 @@ public class ProductsController : ControllerBase
             .DispatchAsync<CreateProductCommand, ResultViewModel<Guid>>(request);
 
         if (!result.IsSuccess)
-        {
             return BadRequest(result.Message);
-        }
 
         return Ok(result);
     }
@@ -72,9 +70,7 @@ public class ProductsController : ControllerBase
             await _mediator.DispatchAsync<DownloadImageForProductQuery, ResultViewModel<Stream>>(query);
 
         if (!result.IsSuccess || result.Data == null)
-        {
             return BadRequest(result.Message);
-        }
 
         return File(result.Data, "image/jpeg");
     }
@@ -84,8 +80,7 @@ public class ProductsController : ControllerBase
     {
         var query = new DownloadAllImagesForProductQuery(id);
 
-        var result =
-            await _mediator.DispatchAsync<DownloadAllImagesForProductQuery, ResultViewModel<List<Stream>>>(query);
+        var result = await _mediator.DispatchAsync<DownloadAllImagesForProductQuery, ResultViewModel<IEnumerable<Stream>>>(query);
 
         var streams = result.Data;
         if (streams is null) return NotFound();

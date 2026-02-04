@@ -1,6 +1,7 @@
 ﻿using EcommerceDev.Core.Entities;
 using EcommerceDev.Core.Repositories;
 using EcommerceDev.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace EcommerceDev.Infrastructure.Repositories;
 
@@ -18,6 +19,11 @@ public class CustomerRepository : ICustomerRepository
         await _context.SaveChangesAsync();
 
         return customer.Id;
+    }
+
+    public async Task<CustomerAddress?> GetAddressAsync(Guid id)
+    {
+        return await _context.CustomerAddresses.SingleOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<Guid> CreateAddressAsync(CustomerAddress address)

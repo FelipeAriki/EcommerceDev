@@ -24,7 +24,7 @@ public class ProductDetailsViewModel
             Brand = product.Brand,
             Quantity = product.Quantity,
             CategoryName = product.Category.Title,
-            ReviewsCount = product.Reviews.Count,
+            ReviewsCount = product.Reviews.Count(),
         };
     }
 }

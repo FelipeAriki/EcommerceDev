@@ -25,9 +25,7 @@ public class ShoppingCartsController : ControllerBase
         var result = await _mediator.DispatchAsync<GetShoppingCartQuery, ResultViewModel<IEnumerable<ProductItemShoppingCartModel>>>(query);
 
         if (!result.IsSuccess)
-        {
             return NotFound(result.Message);
-        }
 
         return Ok(result.Data);
     }
@@ -40,9 +38,7 @@ public class ShoppingCartsController : ControllerBase
         var result = await _mediator.DispatchAsync<CreateOrUpdateShoppingCartCommand, ResultViewModel<bool>>(command);
 
         if (!result.IsSuccess)
-        {
             return NotFound(result.Message);
-        }
 
         return Ok(result.Data);
     }

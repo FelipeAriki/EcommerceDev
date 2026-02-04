@@ -22,9 +22,7 @@ public class ProductCategoriesController : ControllerBase
             .DispatchAsync<CreateCategoryCommand, ResultViewModel<Guid>>(request);
 
         if (!result.IsSuccess)
-        {
             return BadRequest(result.Message);
-        }
 
         return Ok(result);
     }

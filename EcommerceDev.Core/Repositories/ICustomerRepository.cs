@@ -6,4 +6,5 @@ public interface ICustomerRepository
 {
     Task<Guid> CreateCustomerAsync(Customer customer);
     Task<Guid> CreateAddressAsync(CustomerAddress address);
+    Task<CustomerAddress?> GetAddressAsync(Guid id);
 }

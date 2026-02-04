@@ -5,9 +5,9 @@ namespace EcommerceDev.Application.Commands.ShoppingCarts.CreateOrUpdateShopping
 public class CreateOrUpdateShoppingCartCommand
 {
     public Guid IdCustomer { get; set; }
-    public List<ProductItemShoppingCartModel> Items { get; set; }
+    public IEnumerable<ProductItemShoppingCartModel> Items { get; set; }
 
-    public CreateOrUpdateShoppingCartCommand(Guid idCustomer, List<ProductItemShoppingCartModel> items)
+    public CreateOrUpdateShoppingCartCommand(Guid idCustomer, IEnumerable<ProductItemShoppingCartModel> items)
     {
         IdCustomer = idCustomer;
         Items = items;

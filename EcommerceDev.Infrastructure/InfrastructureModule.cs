@@ -1,6 +1,7 @@
 ﻿using Azure.Storage.Blobs;
 using EcommerceDev.Core.Repositories;
 using EcommerceDev.Infrastructure.Caching;
+using EcommerceDev.Infrastructure.Geolocation;
 using EcommerceDev.Infrastructure.Messaging;
 using EcommerceDev.Infrastructure.Messaging.Consumers;
 using EcommerceDev.Infrastructure.Persistence;
@@ -23,7 +24,8 @@ public static class InfrastructureModule
                 .AddRepositories()
                 .AddMessaging(configuration)
                 .AddStorage(configuration)
-                .AddCaching(configuration);
+                .AddCaching(configuration)
+                .AddGeolocation(configuration);
 
             return services;
         }
@@ -100,6 +102,13 @@ public static class InfrastructureModule
                 services.AddScoped<ICacheService, CacheService>();
             }
 
+            return services;
+        }
+
+        private IServiceCollection AddGeolocation(IConfiguration configuration)
+        {
+            services.Configure<GeolocationSettings>(configuration.GetSection("Geolocation"));
+            services.AddScoped<IGeolocationService, GoogleGeolocationService>();
             return services;
         }
     }

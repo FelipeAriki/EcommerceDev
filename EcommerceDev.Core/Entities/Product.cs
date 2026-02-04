@@ -9,8 +9,8 @@ public class Product : BaseEntity
     public int Quantity { get; set; }
     public Guid IdCategory { get; set; }
     public ProductCategory Category { get; set; }
-    public List<OrderItemReview> Reviews { get; set; } = [];
-    public List<ProductImage> Images { get; set; } = [];
+    public IEnumerable<OrderItemReview> Reviews { get; set; } = [];
+    public IEnumerable<ProductImage> Images { get; set; } = [];
 
     protected Product() { }
     public Product(string title, string description, decimal price, string brand, int quantity, Guid idCategory)
