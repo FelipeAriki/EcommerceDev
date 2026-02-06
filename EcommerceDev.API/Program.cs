@@ -1,6 +1,7 @@
 using EcommerceDev.Application;
 using EcommerceDev.Core;
 using EcommerceDev.Infrastructure;
+using EcommerceDev.Infrastructure.BackgroundJobs;
 using Hangfire;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,6 +20,14 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddOpenApi();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var recurringJobs = scope.ServiceProvider.GetService<IRecurringJobManager>();
+
+    recurringJobs.AddOrUpdate<CancelExpiredOrdersJob>("expire-orders",
+        job => job.ExecuteAsync(), Cron.Daily);
+}
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

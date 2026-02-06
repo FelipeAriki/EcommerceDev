@@ -51,7 +51,7 @@ public class OrderCreatedEventConsumer : BackgroundService
                     return;
                 }
 
-                order.MarkAsConfirmed();
+                order.MarkAsPaymentPending();
 
                 await repository.UpdateOrderAsync(order);
 

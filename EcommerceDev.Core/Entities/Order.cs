@@ -27,18 +27,6 @@ public class Order : BaseEntity
         Updates = [];
     }
 
-    public void MarkAsConfirmed()
-    {
-        if (Status != OrderStatus.Created)
-        {
-            Console.WriteLine($"[Order] Order is in invalid state for confirmation.");
-
-            throw new Exception("Order is in invalid state for confirmation.");
-        }
-
-        Status = OrderStatus.Confirmed;
-    }
-
     public void MarkAsPaymentPending()
     {
         if (Status != OrderStatus.Created)
