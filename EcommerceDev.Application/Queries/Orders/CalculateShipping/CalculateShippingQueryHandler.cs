@@ -26,7 +26,7 @@ public class CalculateShippingQueryHandler : IHandler<CalculateShippingQuery, Re
     {
         var distanceInKm = await _geolocationService.GetDistance(_geolocationSettings.Origin, request.ZipCode);
 
-        var items = request.Items.Select(i => new OrderItem(i.IdProduct, i.Quantity, 0)).ToList();
+        var items = request.Items.Select(i => new OrderItem(i.IdProduct, i.Quantity)).ToList();
 
         var totalShippingCost = _orderDomainService.CalculateShippingCost(distanceInKm, items);
 

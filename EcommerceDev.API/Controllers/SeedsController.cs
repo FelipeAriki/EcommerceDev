@@ -30,9 +30,9 @@ public class SeedsController : ControllerBase
         var product = new Product("Notebook acer", "Um notebook excelente para jogos",
             6_000m, "Acer", 100, category.Id);
 
-        var order = new Order(customer.Id, address.Id, 10, 6000, new List<OrderItem>
+        var order = new Order(customer.Id, address.Id, 10, new List<OrderItem>
         {
-            new(product.Id, 1, 6000)
+            new(product.Id, 1)
         });
 
         var objects = new List<object>

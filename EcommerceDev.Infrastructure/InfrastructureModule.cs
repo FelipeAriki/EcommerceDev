@@ -7,6 +7,8 @@ using EcommerceDev.Infrastructure.Messaging.Consumers;
 using EcommerceDev.Infrastructure.Persistence;
 using EcommerceDev.Infrastructure.Repositories;
 using EcommerceDev.Infrastructure.Storage;
+using Hangfire;
+using Hangfire.PostgreSql;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,7 +27,8 @@ public static class InfrastructureModule
                 .AddMessaging(configuration)
                 .AddStorage(configuration)
                 .AddCaching(configuration)
-                .AddGeolocation(configuration);
+                .AddGeolocation(configuration)
+                .AddHangfireServices(configuration);
 
             return services;
         }
@@ -109,6 +112,21 @@ public static class InfrastructureModule
         {
             services.Configure<GeolocationSettings>(configuration.GetSection("Geolocation"));
             services.AddScoped<IGeolocationService, GoogleGeolocationService>();
+            return services;
+        }
+
+        private IServiceCollection AddHangfireServices(IConfiguration configuration)
+        {
+            var connectionString = configuration.GetConnectionString("EcommerceDevDb");
+            services.AddHangfire(config =>
+                config
+                .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+                .UseRecommendedSerializerSettings()
+                .UsePostgreSqlStorage(o => o.UseNpgsqlConnection(connectionString))
+            );
+
+            services.AddHangfireServer();
+
             return services;
         }
     }

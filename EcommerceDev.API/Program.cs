@@ -1,6 +1,7 @@
 using EcommerceDev.Application;
 using EcommerceDev.Core;
 using EcommerceDev.Infrastructure;
+using Hangfire;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +31,11 @@ if (app.Environment.IsDevelopment())
         options.RoutePrefix = string.Empty;
     });
 }
+
+app.UseHangfireDashboard("/hangfire", new DashboardOptions()
+{
+    DashboardTitle = "EcommerceDev API Background Jobs",
+});
 
 app.UseHttpsRedirection();
 

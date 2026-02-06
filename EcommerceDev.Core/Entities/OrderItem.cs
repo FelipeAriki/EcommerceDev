@@ -10,10 +10,14 @@ public class OrderItem : BaseEntity
     public OrderItemReview Review { get; set; }
 
     protected OrderItem() { }
-    public OrderItem(Guid idProduct, int quantity, decimal price)
+    public OrderItem(Guid idProduct, int quantity)
     {
         IdProduct = idProduct;
         Quantity = quantity;
+    }
+
+    public void SetItemPrice(decimal price)
+    {
         Price = price;
     }
 }
