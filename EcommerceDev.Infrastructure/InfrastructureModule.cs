@@ -4,6 +4,7 @@ using EcommerceDev.Infrastructure.Caching;
 using EcommerceDev.Infrastructure.Geolocation;
 using EcommerceDev.Infrastructure.Messaging;
 using EcommerceDev.Infrastructure.Messaging.Consumers;
+using EcommerceDev.Infrastructure.Payment;
 using EcommerceDev.Infrastructure.Persistence;
 using EcommerceDev.Infrastructure.Repositories;
 using EcommerceDev.Infrastructure.Storage;
@@ -28,7 +29,8 @@ public static class InfrastructureModule
                 .AddStorage(configuration)
                 .AddCaching(configuration)
                 .AddGeolocation(configuration)
-                .AddHangfireServices(configuration);
+                .AddHangfireServices(configuration)
+                .AddPayment(configuration);
 
             return services;
         }
@@ -127,6 +129,12 @@ public static class InfrastructureModule
 
             services.AddHangfireServer();
 
+            return services;
+        }
+
+        private IServiceCollection AddPayment(IConfiguration configuration)
+        {
+            services.AddScoped<IPaymentService, StripePaymentService>();
             return services;
         }
     }

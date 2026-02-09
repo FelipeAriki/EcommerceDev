@@ -26,6 +26,12 @@ public class CustomerRepository : ICustomerRepository
         return customer.Id;
     }
 
+    public async Task UpdateCustomerAsync(Customer customer)
+    {
+        _context.Customers.Update(customer);
+        await _context.SaveChangesAsync();
+    }
+
     public async Task<CustomerAddress?> GetAddressAsync(Guid id)
     {
         return await _context.CustomerAddresses.SingleOrDefaultAsync(x => x.Id == id);

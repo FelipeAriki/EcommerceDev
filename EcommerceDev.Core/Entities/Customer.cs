@@ -7,6 +7,7 @@ public class Customer : BaseEntity
     public string PhoneNumber { get; set; }
     public DateTime BirthDate { get; set; }
     public string Document { get; set; }
+    public string? IdExternalPayment { get; set; }
     public IEnumerable<CustomerAddress> Addresses { get; set; }
     public IEnumerable<Order> Orders { get; set; }
     public IEnumerable<OrderItemReview> Reviews { get; set; }

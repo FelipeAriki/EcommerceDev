@@ -13,6 +13,8 @@ public class Order : BaseEntity
     public CustomerAddress DeliveryAddress { get; private set; }
     public decimal ShippingPrice { get; private set; }
     public decimal TotalProductsPrice { get; private set; }
+    public string? IdExternalOrder { get; set; }
+    public string? PaymentUrl { get; set; }
     public IEnumerable<OrderItem> Items { get; private set; }
     public IEnumerable<OrderUpdate> Updates { get; private set; }
 
