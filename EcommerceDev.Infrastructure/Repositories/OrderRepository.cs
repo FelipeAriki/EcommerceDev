@@ -14,6 +14,11 @@ public class OrderRepository : IOrderRepository
         _context = context;
     }
 
+    public async Task<IEnumerable<Order>> GetOrdersAsync()
+    {
+        return await _context.Orders.ToListAsync();
+    }
+
     public async Task<Order?> GetOrderByIdAsync(Guid id)
     {
         return await _context.Orders
