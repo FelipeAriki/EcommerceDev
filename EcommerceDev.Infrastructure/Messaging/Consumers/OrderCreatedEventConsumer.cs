@@ -52,7 +52,7 @@ public class OrderCreatedEventConsumer : BackgroundService
 
                 var paymentService = scope.ServiceProvider.GetRequiredService<IPaymentService>();
                 var customerRepository = scope.ServiceProvider.GetRequiredService<ICustomerRepository>();
-                var customer = await customerRepository.GetCustomerById(order.IdCustomer);
+                var customer = await customerRepository.GetCustomerByIdAsync(order.IdCustomer);
                 if(customer is null)
                 {
                     Console.WriteLine($"[Consumer] Customer does not exist");

@@ -14,7 +14,7 @@ public class GetCustomerByIdQueryHandler : IHandler<GetCustomerByIdQuery, Result
 
     public async Task<ResultViewModel<GetAllCustomersViewModel>> HandleAsync(GetCustomerByIdQuery request)
     {
-        var customer = await _customerRepository.GetCustomerById(request.Id);
+        var customer = await _customerRepository.GetCustomerByIdAsync(request.Id);
         if (customer is null) return ResultViewModel<GetAllCustomersViewModel>.Error("Customer not found!");
         return ResultViewModel<GetAllCustomersViewModel>.Success(new GetAllCustomersViewModel
         {

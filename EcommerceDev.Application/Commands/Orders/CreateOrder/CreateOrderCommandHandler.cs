@@ -41,7 +41,7 @@ public class CreateOrderCommandHandler : IHandler<CreateOrderCommand, ResultView
 
     public async Task<ResultViewModel<Guid>> HandleAsync(CreateOrderCommand request)
     {
-        var customer = await _customerRepository.GetCustomerById(request.IdCustomer);
+        var customer = await _customerRepository.GetCustomerByIdAsync(request.IdCustomer);
         if (customer == null) return ResultViewModel<Guid>.Error("Customer not found.");
 
         var address = await _customerRepository.GetAddressAsync(request.DeliveryAddressId);

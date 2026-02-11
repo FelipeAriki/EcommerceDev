@@ -1,5 +1,6 @@
 ﻿using EcommerceDev.Application.Commands.Customers.CreateCustomer;
 using EcommerceDev.Application.Commands.Customers.CreateCustomerAddress;
+using EcommerceDev.Application.Commands.Customers.UpdateCustomer;
 using EcommerceDev.Application.Common;
 using EcommerceDev.Application.Queries.Customers.GetAllCustomers;
 using EcommerceDev.Application.Queries.Customers.GetCustomerById;
@@ -43,6 +44,17 @@ public class CustomersController : ControllerBase
     {
         var result = await _mediator
             .DispatchAsync<CreateCustomerCommand, ResultViewModel<Guid>>(request);
+
+        if (!result.IsSuccess)
+            return BadRequest(result.Message);
+
+        return Ok(result);
+    }
+
+    [HttpPut]
+    public async Task<IActionResult> UpdateCustomer(UpdateCustomerCommand request)
+    {
+        var result = await _mediator.DispatchAsync<UpdateCustomerCommand, ResultViewModel>(request);
 
         if (!result.IsSuccess)
             return BadRequest(result.Message);
