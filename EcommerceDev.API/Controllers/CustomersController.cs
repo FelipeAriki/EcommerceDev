@@ -1,6 +1,8 @@
 ﻿using EcommerceDev.Application.Commands.Customers.CreateCustomer;
 using EcommerceDev.Application.Commands.Customers.CreateCustomerAddress;
 using EcommerceDev.Application.Common;
+using EcommerceDev.Application.Queries.Customers.GetAllCustomers;
+using EcommerceDev.Application.Queries.Customers.GetCustomerById;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EcommerceDev.API.Controllers;
@@ -14,6 +16,26 @@ public class CustomersController : ControllerBase
     public CustomersController(IMediator mediator)
     {
         _mediator = mediator;
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetCustomers()
+    {
+        var result = await _mediator.DispatchAsync<GetAllCustomersQuery, ResultViewModel<IEnumerable<GetAllCustomersViewModel>>>(new GetAllCustomersQuery());
+        if (!result.IsSuccess)
+            return BadRequest(result.Message);
+
+        return Ok(result);
+    }
+
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> GetCustomerById(Guid id)
+    {
+        var result = await _mediator.DispatchAsync<GetCustomerByIdQuery, ResultViewModel<GetAllCustomersViewModel>>(new GetCustomerByIdQuery(id));
+        if (!result.IsSuccess)
+            return BadRequest(result.Message);
+
+        return Ok(result);
     }
 
     [HttpPost]

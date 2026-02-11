@@ -13,6 +13,11 @@ public class CustomerRepository : ICustomerRepository
         _context = context;
     }
 
+    public async Task<IEnumerable<Customer>> GetCustomersAsync()
+    {
+        return await _context.Customers.ToListAsync();
+    }
+
     public async Task<Customer?> GetCustomerById(Guid id)
     {
         return await _context.Customers.SingleOrDefaultAsync(x => x.Id == id);

@@ -1,5 +1,9 @@
-﻿using EcommerceDev.Application.Commands.Categories.CreateCategory;
+﻿using Azure.Core;
+using EcommerceDev.Application.Commands.Categories.CreateCategory;
 using EcommerceDev.Application.Common;
+using EcommerceDev.Application.Queries.ProductCategories;
+using EcommerceDev.Application.Queries.ProductCategories.GetAllProductCategories;
+using EcommerceDev.Application.Queries.ProductCategories.GetProductCategoryById;
 using Microsoft.AspNetCore.Mvc;
 
 namespace EcommerceDev.API.Controllers;
@@ -13,6 +17,26 @@ public class ProductCategoriesController : ControllerBase
     public ProductCategoriesController(IMediator mediator)
     {
         _mediator = mediator;
+    }
+
+    [HttpGet]
+    public async Task<IActionResult> GetCategories()
+    {
+        var result = await _mediator.DispatchAsync<GetProductCategoriesQuery, ResultViewModel<IEnumerable<ProductCategoryViewModel>>>(new GetProductCategoriesQuery());
+        if (!result.IsSuccess)
+            return BadRequest(result.Message);
+
+        return Ok(result);
+    }
+
+    [HttpGet("{id:guid}")]
+    public async Task<IActionResult> GetCategoriesById(Guid id)
+    {
+        var result = await _mediator.DispatchAsync<GetProductCategoryByIdQuery, ResultViewModel<ProductCategoryViewModel>>(new GetProductCategoryByIdQuery(id));
+        if (!result.IsSuccess)
+            return BadRequest(result.Message);
+
+        return Ok(result);
     }
 
     [HttpPost]

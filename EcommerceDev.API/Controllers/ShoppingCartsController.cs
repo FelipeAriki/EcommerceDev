@@ -18,7 +18,7 @@ public class ShoppingCartsController : ControllerBase
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> GetShoppingCartsController(Guid id)
+    public async Task<IActionResult> GetShoppingCarts(Guid id)
     {
         var query = new GetShoppingCartQuery(id);
 
