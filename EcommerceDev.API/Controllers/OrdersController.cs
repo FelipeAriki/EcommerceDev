@@ -1,4 +1,5 @@
 ﻿using EcommerceDev.Application.Commands.Orders.CreateOrder;
+using EcommerceDev.Application.Commands.Orders.UpdateOrder;
 using EcommerceDev.Application.Common;
 using EcommerceDev.Application.Queries.Orders.CalculateShipping;
 using EcommerceDev.Application.Queries.Orders.GetAllOrders;
@@ -46,6 +47,16 @@ public class OrdersController : ControllerBase
         return Ok(result);
     }
 
+    [HttpPut]
+    public async Task<IActionResult> UpdateOrder(UpdateOrderCommand command)
+    {
+        var result = await _mediator.DispatchAsync<UpdateOrderCommand, ResultViewModel>(command);
+        if (!result.IsSuccess)
+            return BadRequest(result.Message);
+
+        return Ok(result);
+    }
+
     [HttpPost("calculate-shipping")]
     public async Task<IActionResult> CalculateShipping(CalculateShippingQuery request)
     {
@@ -53,9 +64,7 @@ public class OrdersController : ControllerBase
             .DispatchAsync<CalculateShippingQuery, ResultViewModel<decimal>>(request);
 
         if (!result.IsSuccess)
-        {
             return BadRequest(result.Message);
-        }
 
         return Ok(result);
     }

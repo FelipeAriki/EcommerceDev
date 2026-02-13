@@ -1,4 +1,6 @@
-﻿using EcommerceDev.Application.Commands.Products.CreateProduct;
+﻿using Azure.Core;
+using EcommerceDev.Application.Commands.Products.CreateProduct;
+using EcommerceDev.Application.Commands.Products.UpdateProduct;
 using EcommerceDev.Application.Commands.Products.UploadImageForProduct;
 using EcommerceDev.Application.Common;
 using EcommerceDev.Application.Queries.Products.DownloadAllImagesForProduct;
@@ -41,6 +43,18 @@ public class ProductsController : ControllerBase
     {
         var result = await _mediator
             .DispatchAsync<CreateProductCommand, ResultViewModel<Guid>>(request);
+
+        if (!result.IsSuccess)
+            return BadRequest(result.Message);
+
+        return Ok(result);
+    }
+
+    [HttpPut]
+    public async Task<IActionResult> UpdateProduct(UpdateProductCommand command)
+    {
+        var result = await _mediator
+            .DispatchAsync<UpdateProductCommand, ResultViewModel>(command);
 
         if (!result.IsSuccess)
             return BadRequest(result.Message);

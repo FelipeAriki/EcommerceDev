@@ -5,6 +5,7 @@ namespace EcommerceDev.Core.Repositories;
 public interface IProductRepository
 {
     Task<Guid> CreateProductAsync(Product product);
+    Task UpdateProductAsync(Product product);
     Task<IEnumerable<Product>> GetProductsAsync();
     Task<Product?> GetProductByIdAsync(Guid id);
 

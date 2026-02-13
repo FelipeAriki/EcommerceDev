@@ -6,17 +6,18 @@ public class Order : BaseEntity
 {
     public Guid IdCustomer { get; private set; }
     public Customer Customer { get; private set; }
-    public DateTime? ConfirmationDate { get; private set; }
-    public DateTime? ShippingDate { get; private set; }
-    public OrderStatus Status { get; private set; }
+    public DateTime? ConfirmationDate { get; set; }
+    public DateTime? ShippingDate { get; set; }
+    public OrderStatus Status { get; set; }
     public Guid DeliveryAddressId { get; private set; }
     public CustomerAddress DeliveryAddress { get; private set; }
-    public decimal ShippingPrice { get; private set; }
-    public decimal TotalProductsPrice { get; private set; }
+    public decimal ShippingPrice { get; set; }
+    public decimal TotalProductsPrice { get; set; }
     public string? IdExternalOrder { get; set; }
     public string? PaymentUrl { get; set; }
-    public IEnumerable<OrderItem> Items { get; private set; }
-    public IEnumerable<OrderUpdate> Updates { get; private set; }
+    public ICollection<OrderItem> Items { get; private set; } = new List<OrderItem>();
+    public ICollection<OrderUpdate> Updates { get; private set; } = new List<OrderUpdate>();
+
 
     protected Order() { }
     public Order(Guid idCustomer, Guid deliveryAddressId, decimal shippingPrice, IEnumerable<OrderItem> items)
@@ -25,8 +26,8 @@ public class Order : BaseEntity
         Status = OrderStatus.Created;
         DeliveryAddressId = deliveryAddressId;
         ShippingPrice = shippingPrice;
-        Items = items;
-        Updates = [];
+        Items = new List<OrderItem>(items);
+        Updates = new List<OrderUpdate>();
     }
 
     public void MarkAsPaymentPending()
@@ -35,7 +36,7 @@ public class Order : BaseEntity
         {
             Console.WriteLine($"[Order] Order is in invalid state for payment.");
 
-            throw new Exception("Order is in invalid state for payment.");
+            return;
         }
 
         Status = OrderStatus.PaymentPending;

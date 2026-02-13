@@ -30,7 +30,8 @@ public class GetAllproductsQueryHandler : IHandler<GetAllProductsQuery, ResultVi
         {
             Id = p.Id,
             Title = p.Title,
-            Price = p.Price
+            Description = p.Description,
+            Price = p.Price,
         }).ToList();
 
         await _cacheService.SetAsync(_cacheKeyPrefix, productsViewModel);

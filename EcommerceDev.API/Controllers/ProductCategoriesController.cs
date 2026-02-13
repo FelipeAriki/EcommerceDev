@@ -1,5 +1,6 @@
 ﻿using Azure.Core;
 using EcommerceDev.Application.Commands.Categories.CreateCategory;
+using EcommerceDev.Application.Commands.Categories.UpdateCategory;
 using EcommerceDev.Application.Common;
 using EcommerceDev.Application.Queries.ProductCategories;
 using EcommerceDev.Application.Queries.ProductCategories.GetAllProductCategories;
@@ -45,6 +46,16 @@ public class ProductCategoriesController : ControllerBase
         var result = await _mediator
             .DispatchAsync<CreateCategoryCommand, ResultViewModel<Guid>>(request);
 
+        if (!result.IsSuccess)
+            return BadRequest(result.Message);
+
+        return Ok(result);
+    }
+
+    [HttpPut]
+    public async Task<IActionResult> UpdateCategory(UpdateCategoryCommand command)
+    {
+        var result = await _mediator.DispatchAsync<UpdateCategoryCommand, ResultViewModel>(command);
         if (!result.IsSuccess)
             return BadRequest(result.Message);
 

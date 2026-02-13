@@ -8,9 +8,10 @@ public class Customer : BaseEntity
     public DateTime BirthDate { get; set; }
     public string Document { get; set; }
     public string? IdExternalPayment { get; set; }
-    public IEnumerable<CustomerAddress> Addresses { get; set; }
-    public IEnumerable<Order> Orders { get; set; }
-    public IEnumerable<OrderItemReview> Reviews { get; set; }
+    public ICollection<CustomerAddress> Addresses { get; set; } = new List<CustomerAddress>();
+    public ICollection<Order> Orders { get; set; } = new List<Order>();
+    public ICollection<OrderItemReview> Reviews { get; set; } = new List<OrderItemReview>();
+
 
     protected Customer() { }
     public Customer(string fullName, string email, string phoneNumber, DateTime birthDate, string document)
@@ -21,6 +22,8 @@ public class Customer : BaseEntity
         BirthDate = birthDate;
         Document = document;
 
-        Addresses = [];
+        Addresses = new List<CustomerAddress>();
+        Orders = new List<Order>();
+        Reviews = new List<OrderItemReview>();
     }
 }

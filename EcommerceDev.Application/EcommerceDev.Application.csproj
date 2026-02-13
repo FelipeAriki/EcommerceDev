@@ -10,7 +10,6 @@
     <Folder Include="Commands\Categories\CreateCategory\" />
     <Folder Include="Commands\Customers\CreateCustomer\" />
     <Folder Include="Commands\Customers\CreateCustomerAddress\" />
-    <Folder Include="Commands\Orders\CreateOrder\" />
     <Folder Include="Commands\Products\CreateProduct\" />
   </ItemGroup>
 

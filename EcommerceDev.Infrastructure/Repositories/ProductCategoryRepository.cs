@@ -31,4 +31,10 @@ public class ProductCategoryRepository : IProductCategoryRepository
 
         return productCategory.Id;
     }
+
+    public async Task UpdateProductCategoryAsync(ProductCategory productCategory)
+    {
+        _context.ProductCategories.Update(productCategory);
+        await _context.SaveChangesAsync();
+    }
 }

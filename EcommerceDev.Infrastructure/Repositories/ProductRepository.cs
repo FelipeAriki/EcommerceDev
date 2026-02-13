@@ -35,6 +35,12 @@ public class ProductRepository : IProductRepository
 
         return product.Id;
     }
+
+    public async Task UpdateProductAsync(Product product)
+    {
+        _context.Products.Update(product);
+        await _context.SaveChangesAsync();
+    }
     #endregion
 
     #region Imagem Produtos
