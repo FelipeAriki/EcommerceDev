@@ -4,12 +4,12 @@ using EcommerceDev.Infrastructure.Caching;
 
 namespace EcommerceDev.Application.Queries.Products.GetAllProducts;
 
-public class GetAllproductsQueryHandler : IHandler<GetAllProductsQuery, ResultViewModel<IEnumerable<GetAllProductsItemViewModel>>>
+public class GetAllProductsQueryHandler : IHandler<GetAllProductsQuery, ResultViewModel<IEnumerable<GetAllProductsItemViewModel>>>
 {
     private readonly IProductRepository _productRepository;
     private readonly ICacheService _cacheService;
     private const string _cacheKeyPrefix = "products:all";
-    public GetAllproductsQueryHandler(IProductRepository productRepository, ICacheService cacheService)
+    public GetAllProductsQueryHandler(IProductRepository productRepository, ICacheService cacheService)
     {
         _productRepository = productRepository;
         _cacheService = cacheService;
@@ -17,7 +17,7 @@ public class GetAllproductsQueryHandler : IHandler<GetAllProductsQuery, ResultVi
 
     public async Task<ResultViewModel<IEnumerable<GetAllProductsItemViewModel>>> HandleAsync(GetAllProductsQuery request)
     {
-        var cachedProducts = await _cacheService.GetAsync<IEnumerable<GetAllProductsItemViewModel>>(_cacheKeyPrefix);
+        var cachedProducts = await _cacheService.GetAsync<List<GetAllProductsItemViewModel>>(_cacheKeyPrefix);
 
         if (cachedProducts != null)
         {
