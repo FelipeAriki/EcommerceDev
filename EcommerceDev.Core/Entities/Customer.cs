@@ -8,6 +8,14 @@ public class Customer : BaseEntity
     public DateTime BirthDate { get; set; }
     public string Document { get; set; }
     public string? IdExternalPayment { get; set; }
+
+    // Authentication fields
+    public string PasswordHash { get; set; } = string.Empty;
+    public bool IsEmailVerified { get; set; }
+    public string? EmailVerificationToken { get; set; }
+    public DateTime? LastLoginDate { get; set; }
+    public bool IsActive { get; set; } = true;
+
     public ICollection<CustomerAddress> Addresses { get; set; } = new List<CustomerAddress>();
     public ICollection<Order> Orders { get; set; } = new List<Order>();
     public ICollection<OrderItemReview> Reviews { get; set; } = new List<OrderItemReview>();

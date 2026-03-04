@@ -10,4 +10,6 @@ public interface ICustomerRepository
     Task UpdateCustomerAsync(Customer customer);
     Task<Guid> CreateAddressAsync(CustomerAddress address);
     Task<CustomerAddress?> GetAddressAsync(Guid id);
+    Task<Customer?> GetCustomerByEmailAsync(string email);
+    Task<bool> EmailExists(string email);
 }

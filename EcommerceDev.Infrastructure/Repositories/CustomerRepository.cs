@@ -49,4 +49,14 @@ public class CustomerRepository : ICustomerRepository
 
         return address.Id;
     }
+
+    public async Task<Customer?> GetCustomerByEmailAsync(string email)
+    {
+        return await _context.Customers.SingleOrDefaultAsync(x => x.Email == email);
+    }
+
+    public async Task<bool> EmailExists(string email)
+    {
+        return await _context.Customers.AnyAsync(x => x.Email == email);
+    }
 }
