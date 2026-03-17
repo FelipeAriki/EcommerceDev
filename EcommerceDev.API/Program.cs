@@ -44,7 +44,7 @@ builder.Services.AddSignalR();
 // Add CORS to allow React frontend to connect
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowReactApp", policy =>
+    options.AddPolicy("Frontend", policy =>
     {
         policy.WithOrigins("http://localhost:5173", "http://localhost:3000")
             .AllowAnyHeader()
@@ -89,7 +89,7 @@ app.UseHangfireDashboard("/hangfire", new DashboardOptions()
 app.UseHttpsRedirection();
 
 // Enable CORS
-app.UseCors("AllowReactApp");
+app.UseCors("Frontend");
 
 app.UseAuthorization();
 

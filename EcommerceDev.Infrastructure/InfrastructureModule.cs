@@ -1,5 +1,6 @@
 ﻿using Azure.Storage.Blobs;
 using EcommerceDev.Core.Repositories;
+using EcommerceDev.Core.Services;
 using EcommerceDev.Infrastructure.Caching;
 using EcommerceDev.Infrastructure.Geolocation;
 using EcommerceDev.Infrastructure.Messaging;
@@ -7,9 +8,11 @@ using EcommerceDev.Infrastructure.Messaging.Consumers;
 using EcommerceDev.Infrastructure.Payment;
 using EcommerceDev.Infrastructure.Persistence;
 using EcommerceDev.Infrastructure.Repositories;
+using EcommerceDev.Infrastructure.Services;
 using EcommerceDev.Infrastructure.Storage;
 using Hangfire;
 using Hangfire.PostgreSql;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,7 +33,8 @@ public static class InfrastructureModule
                 .AddCaching(configuration)
                 .AddGeolocation(configuration)
                 .AddHangfireServices(configuration)
-                .AddPayment(configuration);
+                .AddPayment(configuration)
+                .AddAuthenticationServices();
 
             return services;
         }
@@ -135,6 +139,14 @@ public static class InfrastructureModule
         private IServiceCollection AddPayment(IConfiguration configuration)
         {
             services.AddScoped<IPaymentService, StripePaymentService>();
+            return services;
+        }
+
+        private IServiceCollection AddAuthenticationServices()
+        {
+            services.AddScoped<IPasswordHasher, PasswordHasher>();
+            services.AddScoped<IJwtTokenService, JwtTokenService>();
+
             return services;
         }
     }
